@@ -1,6 +1,7 @@
 import {
   createContext,
   type PropsWithChildren,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -8,6 +9,9 @@ import {
 import type { CourseOffer } from '../types/course'
 
 type EnrollmentContextValue = {
+  isDetailsOpen: boolean
+  openDetails: () => void
+  closeDetails: () => void
   selectedCourse: CourseOffer | null
   setSelectedCourse: (course: CourseOffer | null) => void
 }
@@ -15,14 +19,20 @@ type EnrollmentContextValue = {
 const EnrollmentContext = createContext<EnrollmentContextValue | undefined>(undefined)
 
 export function EnrollmentProvider({ children }: PropsWithChildren) {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState<CourseOffer | null>(null)
+  const openDetails = useCallback(() => setIsDetailsOpen(true), [])
+  const closeDetails = useCallback(() => setIsDetailsOpen(false), [])
 
   const value = useMemo(
     () => ({
+      isDetailsOpen,
+      openDetails,
+      closeDetails,
       selectedCourse,
       setSelectedCourse,
     }),
-    [selectedCourse],
+    [closeDetails, isDetailsOpen, openDetails, selectedCourse],
   )
 
   return <EnrollmentContext.Provider value={value}>{children}</EnrollmentContext.Provider>
