@@ -741,6 +741,11 @@ input {
   display: block;
 }
 
+.enrollment-field-group {
+  display: grid;
+  gap: 6px;
+}
+
 .enrollment-field__label {
   position: absolute;
   top: 50%;
@@ -763,6 +768,13 @@ input {
 .enrollment-field .input {
   width: 100%;
   font-size: 14px;
+}
+
+.enrollment-field__error {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #c43c67;
 }
 
 .enrollment-field .input:focus + .enrollment-field__label,

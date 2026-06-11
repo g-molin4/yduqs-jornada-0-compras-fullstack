@@ -28,6 +28,7 @@ type EnrollmentInputFieldProps = {
   value: string
   inputMode?: React.InputHTMLAttributes<HTMLInputElement>['inputMode']
   maxLength?: number
+  error?: string
   onChange: (value: string) => void
 }
 
@@ -37,21 +38,26 @@ function EnrollmentInputField({
   value,
   inputMode,
   maxLength,
+  error,
   onChange,
 }: EnrollmentInputFieldProps) {
   return (
-    <label className="enrollment-field">
-      <Input
-        type={type}
-        value={value}
-        placeholder=" "
-        inputMode={inputMode}
-        maxLength={maxLength}
-        onChange={(event) => onChange(event.target.value)}
-        aria-label={label}
-      />
-      <span className="enrollment-field__label">{label}</span>
-    </label>
+    <div className="enrollment-field-group">
+      <label className="enrollment-field">
+        <Input
+          type={type}
+          value={value}
+          placeholder=" "
+          inputMode={inputMode}
+          maxLength={maxLength}
+          onChange={(event) => onChange(event.target.value)}
+          aria-label={label}
+          aria-invalid={error ? 'true' : 'false'}
+        />
+        <span className="enrollment-field__label">{label}</span>
+      </label>
+      {error ? <p className="enrollment-field__error">{error}</p> : null}
+    </div>
   )
 }
 
@@ -130,6 +136,7 @@ export function EnrollmentPage() {
     formData.phone.trim().length > 0 &&
     formData.graduationYear.trim().length > 0 &&
     formData.acceptPrivacyPolicy
+  const formLevelError = errors.priceId ?? errors.acceptPrivacyPolicy ?? null
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -170,6 +177,7 @@ export function EnrollmentPage() {
               <EnrollmentInputField
                 label="Nome completo"
                 value={formData.studentName}
+                error={errors.studentName}
                 onChange={(value) =>
                   setFormData((current) => ({ ...current, studentName: value }))
                 }
@@ -184,6 +192,7 @@ export function EnrollmentPage() {
                 value={formData.cpf}
                 inputMode="numeric"
                 maxLength={14}
+                error={errors.cpf}
                 onChange={(value) =>
                   setFormData((current) => ({ ...current, cpf: formatCpf(value) }))
                 }
@@ -194,6 +203,7 @@ export function EnrollmentPage() {
                 value={formData.birthDate}
                 inputMode="numeric"
                 maxLength={10}
+                error={errors.birthDate}
                 onChange={(value) =>
                   setFormData((current) => ({
                     ...current,
@@ -206,6 +216,7 @@ export function EnrollmentPage() {
                 label="E-mail"
                 type="email"
                 value={formData.studentEmail}
+                error={errors.studentEmail}
                 onChange={(value) =>
                   setFormData((current) => ({ ...current, studentEmail: value }))
                 }
@@ -216,6 +227,7 @@ export function EnrollmentPage() {
                 value={formData.phone}
                 inputMode="tel"
                 maxLength={15}
+                error={errors.phone}
                 onChange={(value) =>
                   setFormData((current) => ({ ...current, phone: formatPhone(value) }))
                 }
@@ -226,6 +238,7 @@ export function EnrollmentPage() {
                 value={formData.graduationYear}
                 inputMode="numeric"
                 maxLength={4}
+                error={errors.graduationYear}
                 onChange={(value) =>
                   setFormData((current) => ({
                     ...current,
@@ -271,10 +284,8 @@ export function EnrollmentPage() {
               </label>
             </div>
 
-            {Object.keys(errors).length > 0 ? (
-              <p className="status-message status-message--error">
-                {errors.priceId ?? 'Revise os campos obrigatorios para continuar.'}
-              </p>
+            {formLevelError ? (
+              <p className="status-message status-message--error">{formLevelError}</p>
             ) : null}
 
             {status === 'error' && submissionMessage ? (
