@@ -4,10 +4,87 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model Student {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  cpf         String      @unique
+  phone       String
+  birthDate   DateTime
+  graduationYear String
+
+  enrollments Enrollment[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Course {
+  id            String        @id @default(uuid())
+  name          String
+  status        CourseStatus  @default(ACTIVE)
+
+  prices        CoursePrices[]
+  enrollments   Enrollment[]
+  modality      CourseModality
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model CoursePrices {
+  id              String     @id @default(uuid())
+  courseId        String
+  name            String
+  totalPrice      Decimal    @db.Decimal(10, 2)
+  installments    Int
+  active          Boolean    @default(true)
+  discount        Decimal?   @default(0)
+  price           Decimal
+
+  course          Course?     @relation(fields: [courseId], references: [id])
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  enrollments     Enrollment[]
+}
+
+model Enrollment {
+  id             String            @id @default(uuid())
+  studentId      String
+  courseId       String
+  priceId        String
+  enrollmentDate DateTime          @default(now())
+  status         EnrollmentStatus  @default(ACTIVE)
+
+  student        Student           @relation(fields: [studentId], references: [id])
+  course         Course            @relation(fields: [courseId], references: [id])
+  price         CoursePrices            @relation(fields: [priceId], references: [id])
+
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+
+enum CourseStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  PENDING
+}
+enum CourseModality {
+  PRESENCIAL
+  EAD
 }
