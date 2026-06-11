@@ -106,11 +106,19 @@ export function EnrollmentPage() {
   const [submissionMessage, setSubmissionMessage] = useState<string | null>(null)
   const [errors, setErrors] = useState<Partial<Record<keyof EnrollmentFormData, string>>>({})
   const requiresPriceSelection = (selectedCourse?.paymentOptions?.length ?? 0) > 0
+  const hasRequiredJourneyState =
+    Boolean(selectedCourse) && (!requiresPriceSelection || Boolean(selectedPriceId?.trim()))
   const [formData, setFormData] = useState<EnrollmentFormData>({
     ...initialFormData,
     courseId: selectedCourse?.id ?? '',
     priceId: selectedPriceId ?? '',
   })
+
+  useEffect(() => {
+    if (!hasRequiredJourneyState) {
+      navigateTo('/')
+    }
+  }, [hasRequiredJourneyState])
 
   useEffect(() => {
     setFormData((current) => ({
@@ -137,6 +145,10 @@ export function EnrollmentPage() {
     formData.graduationYear.trim().length > 0 &&
     formData.acceptPrivacyPolicy
   const formLevelError = errors.priceId ?? errors.acceptPrivacyPolicy ?? null
+
+  if (!hasRequiredJourneyState) {
+    return null
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -295,6 +307,7 @@ export function EnrollmentPage() {
             <div className="enrollment-actions">
               <Button
                 className="enrollment-button"
+                data-testid="enrollment-submit"
                 type="submit"
                 disabled={status === 'submitting' || !isFormReadyToSubmit}
               >

@@ -34,6 +34,7 @@ export function CourseDetailsPage() {
         className="details-panel"
         onClick={(event) => event.stopPropagation()}
         aria-label="Mais detalhes"
+        data-testid="course-details-sidebar"
       >
         <header className="details-panel__header">
           <h2>Mais detalhes</h2>
@@ -63,7 +64,11 @@ export function CourseDetailsPage() {
                     const isSelected = option.id === selectedOptionId
 
                     return (
-                      <label className="details-option" key={option.id}>
+                      <label
+                        className="details-option"
+                        key={option.id}
+                        data-testid={`payment-option-${option.id}`}
+                      >
                         <span className={`details-option__radio${isSelected ? ' is-selected' : ''}`}>
                           <input
                             type="radio"
@@ -114,6 +119,7 @@ export function CourseDetailsPage() {
           ) : null}
           <Button
             className="details-panel__button"
+            data-testid="course-details-advance"
             disabled={hasPaymentOptions && !selectedOptionId}
             onClick={() => {
               setSelectedPriceId(hasPaymentOptions ? selectedOptionId : null)

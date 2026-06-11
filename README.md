@@ -1,88 +1,449 @@
-# 🚀 Desafio Fullstack – Processo Seletivo
+# Faculdade Estácio - Jornada de Matrícula Fullstack
 
-Bem-vindo(a)! Este é o repositório base para o **Desafio Fullstack** da nossa etapa de seleção de novos colaboradores.
+Aplicação fullstack para exibição de ofertas de cursos e realização de matrícula, construída como teste técnico com foco em arquitetura, validações, UX, documentação e testes automatizados.
 
----
+## Visão geral
 
-## 🎯 Objetivo
+O projeto reproduz uma jornada de compra/matrícula da Estácio com:
 
-Construir uma aplicação **fullstack** onde usuários podem visualizar ofertas de cursos, selecionar um curso e realizar a matrícula.
+- listagem de cursos vinda do backend
+- abertura de sidebar com detalhes do curso
+- seleção de parcela quando o curso possui preços
+- fluxo de matrícula com validações no frontend e no backend
+- tela de sucesso ao concluir a matrícula
+- tratamento de erros com feedback visual
+- layout responsivo para desktop e mobile
 
-O **handoff de design** está disponível no Figma:  
-🔗 [Acessar Figma](https://www.figma.com/design/jJLBqZG5RLoL9pbviYvAZW/Teste---Desenvolvimento?node-id=8-2156&t=FjZv9T176fS24B4e-0)  
-🔑 **Senha:** `Teste-123`
+## Stack utilizada
 
----
+### Frontend
 
-## 🛠️ Requisitos
+- React 19
+- TypeScript
+- Vite
+- Context API
+- shadcn/ui
+- Radix UI
+- Vitest
+- React Testing Library
+- Playwright
 
-### Backend (Node.js + TypeScript)
-- Framework: **NestJS**  
-- Banco de dados: **PostgreSQL ou MongoDB**  
-- Estrutura em camadas (**controllers, services, repositories**)  
-- Validações de entrada (ex.: email válido, campos obrigatórios)  
-- Documentação da API (**Swagger ou similar**)  
-- Testes automatizados (**unitários e integração**)  
+### Backend
 
-### Frontend (React + TypeScript)
-- Framework: **React**  
-- Gerenciamento de estado: **Context API**  
-- Validações de formulário (email, telefone, etc.)  
-- Feedback ao usuário (**loading, erros, sucesso**)  
-- Design responsivo  
-- Testes com **React Testing Library**
+- NestJS
+- TypeScript
+- Prisma
+- PostgreSQL
+- Swagger
+- Jest
+- Supertest
 
-### Extras (opcional, diferencial)
-- Banco em **Docker** com migrations (**Prisma, TypeORM ou Sequelize**)  
-- Logs estruturados  
-- Uso de bibliotecas de UI como **shadcn/ui**, **Material UI (MUI)**, **Chakra UI** ou outras similares para acelerar o desenvolvimento do frontend
-  
----
+### Infra local
 
-## ✅ Regras Importantes
+- Docker Compose para o PostgreSQL
+- `concurrently` para subir frontend e backend juntos
 
-1. **Commits**: queremos acompanhar sua **evolução e raciocínio lógico**.  
-   - Faça **commits pequenos e frequentes**, mostrando sua linha de pensamento.  
-   - Não envie tudo em **um único commit final**.
+## Funcionalidades implementadas
 
-2. **Uso de IA**: você pode usar IA como **fonte de consulta**, mas **não é permitido** gerar **100% do projeto apenas com IA**. Queremos ver **seu raciocínio e implementação**.
+- carregamento de cursos via `GET /api/course`
+- suporte a cursos com e sem parcelas
+- sidebar lateral com overlay escurecido
+- bloqueio do botão de avanço até selecionar parcela, quando necessário
+- formulário de matrícula com máscaras
+- validações de:
+  - nome completo
+  - CPF
+  - data de nascimento
+  - telefone
+  - ano de conclusão
+  - aceite dos termos obrigatórios
+- envio da matrícula via `POST /api/student/enroll`
+- mensagens de erro inline e toast
+- proteção de rotas:
+  - acesso direto a `/enrollment` sem contexto redireciona para `/`
+  - acesso direto a `/success` sem contexto redireciona para `/`
+- header e footer reutilizáveis
+- favicon e título da aba personalizados
 
----
+## Estrutura do projeto
 
-## 📊 Critérios de Avaliação
+```text
+.
+├── backend
+│   ├── prisma
+│   ├── src
+│   │   ├── common
+│   │   ├── course
+│   │   ├── infra
+│   │   └── student
+│   └── test
+├── frontend
+│   ├── public
+│   ├── src
+│   │   ├── app
+│   │   ├── components
+│   │   ├── contexts
+│   │   ├── pages
+│   │   ├── schemas
+│   │   ├── services
+│   │   ├── tests
+│   │   └── types
+│   └── tests
+└── docker-compose.yaml
+```
 
-- **Qualidade do código** → clareza, boas práticas, clean code.  
-- **Arquitetura** → separação de responsabilidades, escalabilidade.  
-- **Validações e UX** → feedback claro ao usuário para erros e sucesso.  
-- **Testes** → cobertura e qualidade dos testes.  
-- **Documentação** → README explicando o setup.  
+## Arquitetura
 
----
+### Frontend
 
-## ▶️ Como começar
+- `app/`: composição da aplicação e rotas
+- `components/`: componentes reutilizáveis e UI base
+- `contexts/`: estado compartilhado da jornada de matrícula
+- `pages/`: telas principais da aplicação
+- `services/`: consumo da API
+- `schemas/`: validações da matrícula
+- `tests/`: setup e testes automatizados
 
-1. Faça um **fork** deste repositório para a sua conta GitHub.  
-   - Clique no botão **Fork** no canto superior direito desta página.  
-   - Isso criará uma cópia do repositório no seu perfil.  
+### Backend
 
-2. Clone o repositório que você acabou de forkear para a sua máquina local:  
-   ```bash
-   git clone https://github.com/<seu-usuario>/yduqs-portais-desafio-fullstack.git
-   ```
+- `course/`: controller, service e repository de cursos
+- `student/`: controller, service, mapper e repository de estudantes/matrículas
+- `common/`: validações reutilizáveis
+- `infra/prisma/`: integração com o banco
+- `prisma/`: schema, migrations e seed
 
-3. Acesse a pasta do projeto:  
-   ```bash
-   cd yduqs-portais-desafio-fullstack
-   ```
+## Entidades principais
 
-4. Configure e rode o **backend** e o **frontend** de acordo com os requisitos definidos.  
+### Course
 
-5. Desenvolva sua solução fazendo **commits pequenos e frequentes**, para que possamos acompanhar sua linha de raciocínio e evolução.  
+- `id`
+- `name`
+- `modality`
+- `campus`
+- `address`
+- `status`
 
-6. Ao finalizar, envie o **link do seu fork** para avaliação.  
-   - Exemplo: `https://github.com/<seu-usuario>/yduqs-portais-desafio-fullstack`
+### CoursePrices
 
----
+- `id`
+- `courseId`
+- `name`
+- `installments`
+- `price`
+- `totalPrice`
+- `discount`
 
-Boa sorte! 🚀  
-Estamos ansiosos para ver sua solução.
+### Student
+
+- `id`
+- `name`
+- `email`
+- `cpf`
+- `phone`
+- `birthDate`
+- `graduationYear`
+
+### Enrollment
+
+- `id`
+- `studentId`
+- `courseId`
+- `priceId` opcional
+- `status`
+- `enrollmentDate`
+
+## Pré-requisitos
+
+- Node.js 20+
+- npm 10+
+- Docker e Docker Compose
+
+## Configuração do ambiente
+
+### 1. Suba o banco de dados
+
+Na raiz do projeto:
+
+```bash
+docker compose up -d
+```
+
+O PostgreSQL será exposto em:
+
+- host: `localhost`
+- porta: `5433`
+- database: `yduqs_db`
+- user: `postgres`
+- password: `yduqsdatabase`
+
+### 2. Instale as dependências
+
+No backend:
+
+```bash
+cd backend
+npm install
+```
+
+No frontend:
+
+```bash
+cd frontend
+npm install
+```
+
+Observação:
+
+- a raiz do projeto não precisa de `npm install`
+- o comando `npm run dev` da raiz usa o `concurrently` instalado no `frontend`
+
+### 3. Configure a variável de ambiente do backend
+
+Crie um arquivo `.env` dentro de `backend/` com:
+
+```env
+DATABASE_URL="postgresql://postgres:yduqsdatabase@localhost:5433/yduqs_db?schema=public"
+```
+
+### 4. Gere o client do Prisma e aplique as migrations
+
+No diretório `backend`:
+
+```bash
+npx prisma generate
+npx prisma migrate deploy
+```
+
+Se preferir ambiente de desenvolvimento local com criação de migration quando necessário:
+
+```bash
+npx prisma migrate dev
+```
+
+### 5. Popule o banco com dados iniciais
+
+No diretório `backend`:
+
+```bash
+npm run seed
+```
+
+O seed cria:
+
+- 1 curso presencial com múltiplas parcelas
+- 1 curso EAD sem parcelas
+
+## Como executar
+
+### Subir frontend e backend juntos
+
+Na raiz do projeto:
+
+```bash
+npm run dev
+```
+
+Esse comando orquestra:
+
+- `backend`: `npm run start:dev --prefix backend`
+- `frontend`: `npm run dev --prefix frontend`
+
+### Subir separadamente
+
+Backend:
+
+```bash
+cd backend
+npm run start:dev
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+## URLs locais
+
+### Frontend
+
+- `http://localhost:5173`
+
+### Backend
+
+- API base: `http://localhost:3000/api`
+- Swagger: `http://localhost:3000/docs`
+
+## Endpoints principais
+
+### `GET /api/course`
+
+Retorna a lista de cursos com modalidade, campus, endereço e parcelas.
+
+Exemplo resumido:
+
+```json
+[
+  {
+    "id": "course-presencial-manha",
+    "name": "Presencial - Manha",
+    "modality": "PRESENCIAL",
+    "campus": "CAMPINAS - VILA INDUSTRIAL",
+    "address": "RUA DR. SALES DE OLIVEIRA...",
+    "prices": [
+      {
+        "id": "course-price-18x",
+        "name": "18x sem juros",
+        "installments": 18,
+        "price": "169.95",
+        "totalPrice": "3059.10",
+        "discount": "1692.90"
+      }
+    ]
+  }
+]
+```
+
+### `POST /api/student/enroll`
+
+Cria uma matrícula.
+
+Exemplo de payload:
+
+```json
+{
+  "name": "Gabriel Silva",
+  "email": "gabriel@email.com",
+  "phone": "(19) 99999-9999",
+  "cpf": "12345678900",
+  "birthDate": "2000-05-20T00:00:00.000Z",
+  "graduationYear": "2024",
+  "courseId": "course-presencial-manha",
+  "priceId": "course-price-18x"
+}
+```
+
+Observação:
+
+- `priceId` é opcional para cursos sem parcelas
+
+## Validações implementadas
+
+### Frontend e backend
+
+- nome precisa ser completo
+- CPF precisa ser válido
+- data de nascimento precisa ser válida e não pode ser futura
+- telefone precisa ser válido
+- ano de conclusão não pode ser maior que o ano atual
+- estudante duplicado no mesmo curso é rejeitado
+
+### Regras de jornada
+
+- curso com parcelas exige escolha de parcela
+- curso sem parcelas não exige `priceId`
+- formulário só habilita o avanço quando os campos obrigatórios estão preenchidos
+
+## Testes
+
+## Backend
+
+No diretório `backend`:
+
+```bash
+npm test
+npm run test:e2e
+npm run test:cov
+```
+
+Cobertura atual do backend:
+
+- `46` testes
+- cobertura geral em torno de `90%+`
+
+## Frontend
+
+No diretório `frontend`:
+
+```bash
+npm run test:run
+npm run test:cov
+npm run test:e2e
+```
+
+Cobertura atual do frontend:
+
+- testes unitários com Vitest e Testing Library
+- testes E2E com Playwright
+- cobertura geral em torno de `92%` nos testes unitários
+
+### Cenários E2E implementados
+
+- fluxo completo de curso com preço
+- fluxo de curso sem preço
+- erro de matrícula com mensagem inline e toast
+
+## Experiência do usuário
+
+- loading durante busca de cursos
+- mensagens de erro ao carregar dados
+- feedback inline no formulário
+- toast para erros assíncronos
+- sidebar animada
+- layout responsivo para desktop e mobile
+
+## Observações importantes
+
+- o frontend usa `VITE_API_BASE_URL` opcionalmente; sem configuração, o padrão é:
+
+```env
+http://localhost:3000/api
+```
+
+- o backend está com CORS liberado para:
+
+```text
+http://localhost:5173
+```
+
+- se o frontend rodar em outra porta, o CORS precisa ser ajustado no backend
+
+## Comandos úteis
+
+### Raiz
+
+```bash
+npm run dev
+```
+
+### Backend
+
+```bash
+npm run start:dev
+npm run seed
+npx prisma generate
+npx prisma migrate deploy
+```
+
+### Frontend
+
+```bash
+npm run dev
+npm run build
+npm run test:run
+npm run test:cov
+npm run test:e2e
+```
+
+## Status da entrega
+
+O projeto contempla os principais requisitos do teste técnico:
+
+- arquitetura em camadas no backend
+- documentação da API
+- responsividade e fidelidade visual no frontend
+- validações nas duas camadas
+- testes unitários, integração e E2E
+- banco com Prisma e seed
+- documentação de setup

@@ -16,7 +16,7 @@ type CourseCardProps = {
 
 export function CourseCard({ course, onAdvance }: CourseCardProps) {
   return (
-    <Card className="course-card">
+    <Card className="course-card" data-testid={`course-card-${course.id}`}>
       <CardHeader className="course-card__header">
         <div className="course-card__tabs">
           <CardTitle>{course.title}</CardTitle>
@@ -37,7 +37,11 @@ export function CourseCard({ course, onAdvance }: CourseCardProps) {
             <p className="course-card__installment">{course.installment}</p>
           </div>
         )}
-        <Button className="course-card__button" onClick={() => onAdvance?.(course)}>
+        <Button
+          className="course-card__button"
+          data-testid={`course-card-advance-${course.id}`}
+          onClick={() => onAdvance?.(course)}
+        >
           Avancar
         </Button>
       </CardHeader>

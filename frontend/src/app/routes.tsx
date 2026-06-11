@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { CoursesPage } from '../pages/CoursesPage'
 import { EnrollmentPage } from '../pages/EnrollmentPage'
 import { SuccessPage } from '../pages/SuccessPage'
@@ -19,11 +19,12 @@ export function navigateTo(pathname: keyof typeof routeMap) {
 export function AppRoutes() {
   const [pathname, setPathname] = useState(window.location.pathname as keyof typeof routeMap)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function handleRouteChange() {
       setPathname(window.location.pathname as keyof typeof routeMap)
     }
 
+    handleRouteChange()
     window.addEventListener('popstate', handleRouteChange)
     window.addEventListener(ROUTE_CHANGE_EVENT, handleRouteChange)
 
