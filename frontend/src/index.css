@@ -94,6 +94,13 @@ input {
   flex: 0 0 auto;
 }
 
+.brand-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
 .brand__image {
   display: block;
   width: 100%;
@@ -430,6 +437,10 @@ input {
   padding-bottom: 24px;
 }
 
+.footer-mobile-groups {
+  display: none;
+}
+
 .footer-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -583,6 +594,49 @@ input {
   color: #fff;
 }
 
+.toast-viewport {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 60;
+  display: grid;
+  gap: 10px;
+  width: min(360px, calc(100vw - 32px));
+}
+
+.toast {
+  min-height: 52px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(15, 31, 68, 0.18);
+}
+
+.toast p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.toast--error {
+  background: #fff1f4;
+  border: 1px solid #f0a3b8;
+  color: #9f2349;
+}
+
+.toast__close {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
 .status-message {
   margin: 0 0 1rem;
   font-size: 0.95rem;
@@ -596,6 +650,44 @@ input {
 .page-placeholder {
   padding: 4rem 2rem;
   font-size: 1.1rem;
+}
+
+.success-section {
+  padding: 32px 0 56px;
+  min-height: calc(100vh - 262px);
+}
+
+.success-card {
+  width: min(100%, 520px);
+  border: 1px solid #dbe3f6;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  box-shadow: 0 16px 40px rgba(18, 44, 106, 0.08);
+  padding: 28px 24px;
+}
+
+.success-card__eyebrow {
+  margin: 0 0 10px;
+  color: #2151c8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.success-card h2 {
+  margin: 0 0 12px;
+  color: #1a2741;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.success-card p:last-child {
+  margin: 0;
+  color: #596377;
+  font-size: 15px;
+  line-height: 1.55;
 }
 
 .enrollment-section {
@@ -738,6 +830,7 @@ input {
   display: flex;
   justify-content: flex-end;
   z-index: 20;
+  animation: details-overlay-fade 180ms ease-out;
 }
 
 .details-panel {
@@ -747,11 +840,35 @@ input {
   box-shadow: -12px 0 34px rgba(0, 0, 0, 0.14);
   display: flex;
   flex-direction: column;
+  animation: details-panel-slide-in 220ms ease-out;
+  will-change: transform, opacity;
+}
+
+@keyframes details-overlay-fade {
+  from {
+    background: rgba(26, 39, 65, 0);
+  }
+
+  to {
+    background: rgba(26, 39, 65, 0.22);
+  }
+}
+
+@keyframes details-panel-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .details-panel__header {
   min-height: 74px;
-  padding: 20px 24px;
+  padding: 10px 16px;
   border-bottom: 1px solid #e7e8ee;
   display: flex;
   align-items: center;
@@ -782,52 +899,52 @@ input {
 
 .details-panel__body {
   flex: 1;
-  padding: 18px 24px 24px;
+  padding: 16px;
   overflow-y: auto;
 }
 
 .details-panel__prompt {
-  margin: 0 0 14px;
-  font-size: 14px;
+  margin: 0 0 16px;
+  font-size: 12px;
   line-height: 1.4;
   color: #1e2430;
 }
 
 .details-info-banner {
-  margin: -18px -24px 20px;
-  padding: 14px 16px 22px;
+  margin: -16px -16px 24px;
+  padding: 20px 20px 36px;
   background: #2855c7;
   color: #fff;
 }
 
 .details-info-banner svg {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .details-info-banner p {
   margin: 0;
   max-width: 320px;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.45;
 }
 
 .details-table {
   border: 1px solid #4974e6;
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
   background: #fff;
 }
 
 .details-table__head {
-  min-height: 42px;
-  padding: 0 14px;
+  min-height: 28px;
+  padding: 0 10px;
   background: #2855c7;
   color: #fff;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 12px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -837,12 +954,12 @@ input {
 }
 
 .details-option {
-  min-height: 45px;
-  padding: 0 14px 0 12px;
+  min-height: 41px;
+  padding: 0 10px;
   display: grid;
   grid-template-columns: 26px 1fr auto;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   border-top: 1px solid #4974e6;
   cursor: pointer;
 }
@@ -853,8 +970,8 @@ input {
 
 .details-option__radio {
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -868,8 +985,8 @@ input {
 }
 
 .details-option__radio span {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
   border: 2px solid #252525;
   display: block;
@@ -879,40 +996,40 @@ input {
 .details-option__radio.is-selected span::after {
   content: '';
   position: absolute;
-  inset: 4px;
+  inset: 3px;
   border-radius: 999px;
   background: #252525;
 }
 
 .details-option__installment {
-  font-size: 13px;
+  font-size: 12px;
   color: #20242e;
 }
 
 .details-option__total {
-  font-size: 13px;
+  font-size: 12px;
   color: #6d7380;
 }
 
 .details-accordion {
   width: 100%;
-  min-height: 48px;
-  margin-top: 26px;
+  min-height: 40px;
+  margin-top: 16px;
   border: 1px solid #e3e4ea;
-  border-radius: 8px;
+  border-radius: 4px;
   background: #fff;
-  padding: 0 18px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #232734;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
 }
 
 .details-accordion-group {
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 .details-accordion-group .details-accordion {
@@ -920,12 +1037,20 @@ input {
 }
 
 .details-panel__footer {
-  padding: 0 24px 20px;
+  padding: 0 8px 8px;
+}
+
+.details-panel__hint {
+  margin: 0 0 8px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #c43c67;
 }
 
 .details-panel__button {
-  min-height: 39px;
-  border-radius: 8px;
+  min-height: 30px;
+  border-radius: 6px;
+  font-size: 12px;
 }
 
 @media (max-width: 900px) {
@@ -987,18 +1112,33 @@ input {
     min-height: 0;
   }
 
+  .container {
+    padding: 0 16px;
+  }
+
+  .topbar .container {
+    min-height: 52px;
+  }
+
+  .brand {
+    width: 108px;
+    height: 28px;
+  }
+
   .hero-banner__inner {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
   .hero-banner h1 {
-    font-size: 22px;
+    font-size: 20px;
     line-height: 1.2;
+    margin-bottom: 8px;
   }
 
   .hero-banner p {
     font-size: 13px;
+    line-height: 1.45;
   }
 
   .results-copy,
@@ -1029,11 +1169,112 @@ input {
   }
 
   .course-card__current-price {
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+  .options-section {
+    padding-top: 16px;
+    padding-bottom: 24px;
+  }
+
+  .results-copy {
+    margin-bottom: 16px;
+  }
+
+  .options-grid {
+    gap: 16px;
+  }
+
+  .site-footer__top-inner {
+    min-height: 0;
+    padding: 12px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .site-footer__actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .footer-pill {
+    min-height: 40px;
+    font-size: 12px;
+  }
+
+  .footer-pill svg {
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+  }
+
+  .site-footer__content {
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+
+  .footer-mobile-groups {
+    display: grid;
+  }
+
+  .footer-mobile-group {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.24);
+    color: #fff;
+  }
+
+  .footer-mobile-group:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  }
+
+  .footer-mobile-group__summary {
+    min-height: 40px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .footer-mobile-group__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .footer-mobile-group__icon {
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0.9;
+    transition: transform 120ms ease;
+  }
+
+  .footer-mobile-group[open] .footer-mobile-group__icon {
+    transform: rotate(180deg);
+  }
+
+  .footer-mobile-group__links {
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  .footer-mobile-group__links a {
+    color: #d1dcf8;
+    text-decoration: none;
+    font-size: 11px;
   }
 
   .footer-grid {
-    grid-template-columns: 1fr;
+    display: none;
   }
 
   .details-panel {
@@ -1059,6 +1300,230 @@ input {
 
   .enrollment-form {
     width: 100%;
+  }
+
+  .success-section {
+    min-height: 0;
+    padding-top: 24px;
+    padding-bottom: 32px;
+  }
+
+  .success-card {
+    width: 100%;
+    padding: 22px 18px;
+  }
+
+  .success-card h2 {
+    font-size: 22px;
+  }
+
+  .success-card p:last-child {
+    font-size: 14px;
+  }
+
+  .toast-viewport {
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+  }
+
+  .footer-separator {
+    margin: 16px 0;
+  }
+
+  .footer-meta {
+    gap: 16px;
+  }
+
+  .footer-emec {
+    width: 100%;
+    min-height: 0;
+    padding: 12px;
+    border-radius: 12px;
+    justify-content: space-between;
+  }
+
+  .footer-emec p {
+    max-width: 112px;
+    font-size: 10px;
+    line-height: 1.45;
+  }
+
+  .footer-meta__links {
+    gap: 10px;
+  }
+
+  .footer-meta__links a,
+  .footer-bottom span {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .footer-separator--bottom {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0 14px;
+  }
+
+  .topbar .container {
+    min-height: 50px;
+  }
+
+  .brand {
+    width: 104px;
+    height: 27px;
+  }
+
+  .hero-banner__inner {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .hero-banner h1 {
+    font-size: 18px;
+    line-height: 1.15;
+  }
+
+  .hero-banner p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .options-section {
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+
+  .results-copy {
+    margin-bottom: 14px;
+    font-size: 11px;
+  }
+
+  .options-grid {
+    gap: 14px;
+  }
+
+  .course-card {
+    max-width: none;
+  }
+
+  .course-card__header {
+    min-height: 172px;
+    padding: 0 14px 14px;
+  }
+
+  .course-card__tabs {
+    min-height: 30px;
+    margin: 0 -14px 14px;
+    padding: 0 14px;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .course-card__tabs .card__title {
+    font-size: 12px;
+  }
+
+  .course-card__price {
+    margin-bottom: 14px;
+  }
+
+  .course-card__old-price,
+  .course-card__installment,
+  .course-card__description {
+    font-size: 11px;
+  }
+
+  .course-card__price-row {
+    gap: 3px;
+    margin-top: 2px;
+  }
+
+  .course-card__installments-count {
+    font-size: 14px;
+  }
+
+  .course-card__current-price {
+    font-size: 23px;
+    line-height: 1;
+  }
+
+  .button--size-default {
+    min-height: 36px;
+    font-size: 12px;
+  }
+
+  .course-card__button {
+    border-radius: 8px;
+  }
+
+  .course-card__body {
+    min-height: 68px;
+    padding: 12px 14px 14px;
+  }
+
+  .course-card__campus,
+  .course-card__address {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .success-card {
+    padding: 20px 16px;
+  }
+
+  .success-card h2 {
+    font-size: 20px;
+  }
+
+  .success-card p:last-child {
+    font-size: 13px;
+  }
+
+  .site-footer__top-inner {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .footer-pill {
+    min-height: 38px;
+    gap: 10px;
+  }
+
+  .site-footer__content {
+    padding-top: 14px;
+    padding-bottom: 16px;
+  }
+
+  .footer-mobile-group {
+    font-size: 11px;
+  }
+
+  .footer-mobile-group__summary {
+    min-height: 38px;
+    font-size: 11px;
+  }
+
+  .footer-mobile-group__links {
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .footer-emec {
+    padding: 10px;
+  }
+
+  .footer-mobile-group__links a,
+  .footer-emec p,
+  .footer-meta__links a,
+  .footer-bottom span {
+    font-size: 10px;
   }
 }
 
@@ -1353,6 +1818,90 @@ input {
   .footer-pill {
     font-size: 11px;
   }
+
+  .page-shell--enrollment .topbar .container,
+  .page-shell--enrollment .hero-banner .container,
+  .page-shell--enrollment .site-footer__top .container,
+  .page-shell--enrollment .site-footer__content {
+    width: min(100%, 1224px);
+    margin: 0 auto;
+  }
+
+  .page-shell--enrollment .topbar .container {
+    min-height: 48px;
+  }
+
+  .page-shell--enrollment .hero-banner__inner {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .page-shell--enrollment .hero-banner h1 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .page-shell--enrollment .enrollment-section--screen {
+    min-height: calc(100vh - 220px);
+    padding-top: 32px;
+    padding-bottom: 56px;
+  }
+
+  .page-shell--enrollment .enrollment-section--screen .container {
+    width: min(100%, 1224px);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .page-shell--enrollment .enrollment-form {
+    width: min(100%, 412px);
+  }
+
+  .page-shell--enrollment .enrollment-fields {
+    gap: 24px;
+  }
+
+  .page-shell--enrollment .input {
+    min-height: 40px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .page-shell--enrollment .enrollment-field__label {
+    left: 12px;
+    font-size: 12px;
+  }
+
+  .page-shell--enrollment .enrollment-field .input:focus + .enrollment-field__label,
+  .page-shell--enrollment
+    .enrollment-field
+    .input:not(:placeholder-shown)
+    + .enrollment-field__label {
+    font-size: 10px;
+  }
+
+  .page-shell--enrollment .enrollment-help {
+    margin-top: -14px;
+  }
+
+  .page-shell--enrollment .enrollment-consents {
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .page-shell--enrollment .enrollment-actions {
+    margin-top: 16px;
+  }
+
+  .page-shell--enrollment .enrollment-button {
+    width: 74px;
+    min-height: 28px;
+  }
+
+  .page-shell--enrollment .site-footer__top-inner {
+    min-height: 48px;
+  }
 }
 
 @media (min-width: 1440px) {
@@ -1408,60 +1957,36 @@ input {
     margin-bottom: 24px;
   }
 
-  .page-shell--enrollment .container {
-    width: min(100%, 842px);
-    padding-left: 52px;
-    padding-right: 52px;
-  }
-
-  .page-shell--enrollment .topbar .container {
-    min-height: 52px;
-  }
-
-  .page-shell--enrollment .brand {
-    width: 95px;
-    height: 26px;
-  }
-
-  .page-shell--enrollment .hero-banner__inner {
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
-
-  .page-shell--enrollment .hero-banner h1 {
-    margin: 0;
-    font-size: 22px;
-    line-height: 1.25;
-    font-weight: 500;
-  }
-
-  .page-shell--enrollment .hero-banner p {
-    font-size: 13px;
+  .page-shell--enrollment .enrollment-section--screen .container,
+  .page-shell--enrollment .success-section .container {
+    width: min(100%, 780px);
+    padding-left: 40px;
+    padding-right: 40px;
   }
 
   .page-shell--enrollment .enrollment-section--screen {
     min-height: calc(100vh - 176px);
-    padding-top: 30px;
-    padding-bottom: 24px;
+    padding-top: 24px;
+    padding-bottom: 20px;
   }
 
   .page-shell--enrollment .enrollment-form {
-    width: min(100%, 408px);
+    width: min(100%, 420px);
   }
 
   .page-shell--enrollment .enrollment-fields {
-    gap: 16px;
+    gap: 14px;
   }
 
   .page-shell--enrollment .input {
-    min-height: 34px;
-    padding: 9px 10px;
-    font-size: 12px;
+    min-height: 38px;
+    padding: 10px 12px;
+    font-size: 13px;
   }
 
   .page-shell--enrollment .enrollment-field__label {
-    left: 10px;
-    font-size: 12px;
+    left: 12px;
+    font-size: 13px;
   }
 
   .page-shell--enrollment .enrollment-field .input:focus + .enrollment-field__label,
@@ -1470,7 +1995,7 @@ input {
     .input:not(:placeholder-shown)
     + .enrollment-field__label {
     padding: 0 4px;
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .page-shell--enrollment .enrollment-help {
@@ -1480,8 +2005,8 @@ input {
   }
 
   .page-shell--enrollment .enrollment-consents {
-    gap: 18px;
-    margin-top: 14px;
+    gap: 16px;
+    margin-top: 12px;
   }
 
   .page-shell--enrollment .enrollment-checkbox {
@@ -1490,27 +2015,13 @@ input {
   }
 
   .page-shell--enrollment .enrollment-actions {
-    margin-top: 18px;
+    margin-top: 16px;
   }
 
   .page-shell--enrollment .enrollment-button {
     width: 68px;
-    min-height: 30px;
+    min-height: 28px;
     font-size: 12px;
   }
 
-  .page-shell--enrollment .site-footer__compact-inner {
-    min-height: 60px;
-  }
-
-  .page-shell--enrollment .site-footer__compact-actions,
-  .page-shell--enrollment .site-footer__compact-meta {
-    gap: 14px;
-  }
-
-  .page-shell--enrollment .footer-pill,
-  .page-shell--enrollment .site-footer__compact-meta,
-  .page-shell--enrollment .site-footer__compact-meta a {
-    font-size: 11px;
-  }
 }

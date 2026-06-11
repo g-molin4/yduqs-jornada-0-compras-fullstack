@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { AppShell } from '../components/AppShell'
 import { CourseCard } from '../components/CourseCard'
 import { ErrorMessage } from '../components/ErrorMessage'
+import { useToast } from '../components/ui/toast'
 import { Loading } from '../components/Loading'
 import { CourseDetailsPage } from './CourseDetailsPage'
 import { useEnrollment } from '../contexts/EnrollmentContext'
@@ -12,7 +13,9 @@ export function CoursesPage() {
   const [courses, setCourses] = useState<CourseOffer[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const { closeDetails, isDetailsOpen, setSelectedCourse, openDetails } = useEnrollment()
+  const { toast } = useToast()
+  const { closeDetails, isDetailsOpen, setSelectedCourse, setSelectedPriceId, openDetails } =
+    useEnrollment()
 
   useEffect(() => {
     closeDetails()
@@ -23,8 +26,10 @@ export function CoursesPage() {
         setError(null)
         const response = await getCourses()
         setCourses(response)
-      } catch {
-        setError('Nao foi possivel carregar os cursos agora.')
+      } catch (error) {
+        setError(
+          error instanceof Error ? error.message : 'Nao foi possivel carregar os cursos agora.',
+        )
       } finally {
         setIsLoading(false)
       }
@@ -32,6 +37,12 @@ export function CoursesPage() {
 
     void loadCourses()
   }, [closeDetails])
+
+  useEffect(() => {
+    if (error) {
+      toast({ title: error })
+    }
+  }, [error, toast])
 
   return (
     <AppShell
@@ -51,6 +62,7 @@ export function CoursesPage() {
                   course={course}
                   onAdvance={(selected) => {
                     setSelectedCourse(selected)
+                    setSelectedPriceId(null)
                     openDetails()
                   }}
                 />

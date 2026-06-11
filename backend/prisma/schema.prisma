@@ -34,6 +34,8 @@ model Course {
   prices        CoursePrices[]
   enrollments   Enrollment[]
   modality      CourseModality
+  campus        String
+  address       String
 
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -60,13 +62,13 @@ model Enrollment {
   id             String            @id @default(uuid())
   studentId      String
   courseId       String
-  priceId        String
+  priceId        String?
   enrollmentDate DateTime          @default(now())
   status         EnrollmentStatus  @default(ACTIVE)
 
   student        Student           @relation(fields: [studentId], references: [id])
   course         Course            @relation(fields: [courseId], references: [id])
-  price         CoursePrices            @relation(fields: [priceId], references: [id])
+  price         CoursePrices?            @relation(fields: [priceId], references: [id])
 
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt

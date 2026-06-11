@@ -78,12 +78,16 @@ async function main() {
       name: 'Presencial - Manha',
       modality: 'PRESENCIAL',
       status: 'ACTIVE',
+      campus: 'CAMPINAS - VILA INDUSTRIAL',
+      address: 'RUA DR. SALES DE OLIVEIRA, No 1661 - VILA INDUSTRIAL - CAMP...',
     },
     create: {
       id: presencialCourseId,
       name: 'Presencial - Manha',
       modality: 'PRESENCIAL',
       status: 'ACTIVE',
+      campus: 'CAMPINAS - VILA INDUSTRIAL',
+      address: 'RUA DR. SALES DE OLIVEIRA, No 1661 - VILA INDUSTRIAL - CAMP...',
     },
   });
 
@@ -93,12 +97,16 @@ async function main() {
       name: 'EAD',
       modality: 'EAD',
       status: 'ACTIVE',
+      campus: 'BARRA DA TIJUCA - TOM JOB...',
+      address: 'AV. DAS AMERICAS, 4.200, BLOCO 11 - BARRA DA TIJUCA...',
     },
     create: {
       id: eadCourseId,
       name: 'EAD',
       modality: 'EAD',
       status: 'ACTIVE',
+      campus: 'BARRA DA TIJUCA - TOM JOB...',
+      address: 'AV. DAS AMERICAS, 4.200, BLOCO 11 - BARRA DA TIJUCA...',
     },
   });
 

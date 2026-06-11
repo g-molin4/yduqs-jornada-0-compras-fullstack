@@ -1,7 +1,9 @@
-import { type FormEvent, useState } from 'react'
+import { type FormEvent, useEffect, useState } from 'react'
+import { navigateTo } from '../app/routes'
 import { AppShell } from '../components/AppShell'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
+import { useToast } from '../components/ui/toast'
 import { useEnrollment } from '../contexts/EnrollmentContext'
 import { validateEnrollment } from '../schemas/enrollmentSchema'
 import { submitEnrollment } from '../services/enrollmentService'
@@ -9,6 +11,7 @@ import type { EnrollmentFormData, EnrollmentStatus } from '../types/enrollment'
 
 const initialFormData: EnrollmentFormData = {
   courseId: '',
+  priceId: '',
   birthDate: '',
   cpf: '',
   graduationYear: '',
@@ -91,18 +94,48 @@ function formatGraduationYear(value: string) {
 }
 
 export function EnrollmentPage() {
-  const { selectedCourse } = useEnrollment()
+  const { selectedCourse, selectedPriceId, setCompletedStudentName } = useEnrollment()
+  const { toast } = useToast()
   const [status, setStatus] = useState<EnrollmentStatus>('idle')
+  const [submissionMessage, setSubmissionMessage] = useState<string | null>(null)
   const [errors, setErrors] = useState<Partial<Record<keyof EnrollmentFormData, string>>>({})
+  const requiresPriceSelection = (selectedCourse?.paymentOptions?.length ?? 0) > 0
   const [formData, setFormData] = useState<EnrollmentFormData>({
     ...initialFormData,
     courseId: selectedCourse?.id ?? '',
+    priceId: selectedPriceId ?? '',
   })
+
+  useEffect(() => {
+    setFormData((current) => ({
+      ...current,
+      courseId: selectedCourse?.id ?? '',
+      priceId: selectedPriceId ?? '',
+    }))
+  }, [selectedCourse, selectedPriceId])
+
+  useEffect(() => {
+    if (status === 'error' && submissionMessage) {
+      toast({ title: submissionMessage })
+    }
+  }, [status, submissionMessage, toast])
+
+  const isFormReadyToSubmit =
+    formData.courseId.trim().length > 0 &&
+    (!requiresPriceSelection || formData.priceId.trim().length > 0) &&
+    formData.studentName.trim().length > 0 &&
+    formData.cpf.trim().length > 0 &&
+    formData.birthDate.trim().length > 0 &&
+    formData.studentEmail.trim().length > 0 &&
+    formData.phone.trim().length > 0 &&
+    formData.graduationYear.trim().length > 0 &&
+    formData.acceptPrivacyPolicy
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    setSubmissionMessage(null)
 
-    const validation = validateEnrollment(formData)
+    const validation = validateEnrollment(formData, { requiresPriceSelection })
     setErrors(validation.errors)
 
     if (!validation.isValid) {
@@ -112,17 +145,22 @@ export function EnrollmentPage() {
     setStatus('submitting')
 
     try {
-      await submitEnrollment(formData)
+      const response = await submitEnrollment(formData)
+      setCompletedStudentName(response.name)
       setStatus('success')
-    } catch {
+      navigateTo('/success')
+    } catch (error) {
       setStatus('error')
+      setSubmissionMessage(
+        error instanceof Error ? error.message : 'Nao foi possivel concluir a matricula.',
+      )
     }
   }
 
   return (
     <AppShell
       title="Queremos saber um pouco mais sobre voce"
-      footerVariant="compact"
+      footerVariant="full"
       pageVariant="enrollment"
     >
       <section className="enrollment-section enrollment-section--screen">
@@ -235,16 +273,20 @@ export function EnrollmentPage() {
 
             {Object.keys(errors).length > 0 ? (
               <p className="status-message status-message--error">
-                Revise os campos obrigatorios para continuar.
+                {errors.priceId ?? 'Revise os campos obrigatorios para continuar.'}
               </p>
             ) : null}
 
-            {status === 'success' ? (
-              <p className="status-message">Dados enviados com sucesso.</p>
+            {status === 'error' && submissionMessage ? (
+              <p className="status-message status-message--error">{submissionMessage}</p>
             ) : null}
 
             <div className="enrollment-actions">
-              <Button className="enrollment-button" type="submit" disabled={status === 'submitting'}>
+              <Button
+                className="enrollment-button"
+                type="submit"
+                disabled={status === 'submitting' || !isFormReadyToSubmit}
+              >
                 Avancar
               </Button>
             </div>

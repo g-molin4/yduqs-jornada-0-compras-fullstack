@@ -1,11 +1,14 @@
 import { EnrollmentProvider } from '../contexts/EnrollmentContext'
+import { ToastProvider } from '../components/ui/toast'
 import { AppRoutes } from './routes'
 
 function App() {
   return (
-    <EnrollmentProvider>
-      <AppRoutes />
-    </EnrollmentProvider>
+    <ToastProvider>
+      <EnrollmentProvider>
+        <AppRoutes />
+      </EnrollmentProvider>
+    </ToastProvider>
   )
 }
 

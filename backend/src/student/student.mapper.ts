@@ -7,6 +7,15 @@ import { CreateStudentInput, StudentWithCourse } from './student.types';
 @Injectable()
 export class StudentMapper {
   toPrismaCreate(dto: CreateStudentDTO): CreateStudentInput {
+    const enrollmentCreate = dto.priceId?.trim()
+      ? {
+          courseId: dto.courseId,
+          priceId: dto.priceId,
+        }
+      : {
+          courseId: dto.courseId,
+        };
+
     return {
       name: dto.name.trim(),
       email: dto.email.trim().toLowerCase(),
@@ -16,10 +25,7 @@ export class StudentMapper {
       graduationYear: dto.graduationYear.trim(),
 
       enrollments: {
-        create: {
-          courseId: dto.courseId,
-          priceId: dto.priceId,
-        },
+        create: enrollmentCreate,
       },
     };
   }

@@ -1,10 +1,21 @@
 import type { EnrollmentFormData } from '../types/enrollment'
 
-export function validateEnrollment(data: EnrollmentFormData) {
+type ValidateEnrollmentOptions = {
+  requiresPriceSelection?: boolean
+}
+
+export function validateEnrollment(
+  data: EnrollmentFormData,
+  { requiresPriceSelection = true }: ValidateEnrollmentOptions = {},
+) {
   const errors: Partial<Record<keyof EnrollmentFormData, string>> = {}
 
   if (!data.courseId.trim()) {
     errors.courseId = 'Selecione um curso.'
+  }
+
+  if (requiresPriceSelection && !data.priceId.trim()) {
+    errors.priceId = 'Selecione uma parcela disponivel para continuar.'
   }
 
   if (!data.birthDate.trim()) {

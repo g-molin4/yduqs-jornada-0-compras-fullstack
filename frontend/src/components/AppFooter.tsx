@@ -118,6 +118,27 @@ export function AppFooter({ variant = 'full' }: AppFooterProps) {
       </div>
 
       <div className="container site-footer__content">
+        <div className="footer-mobile-groups" aria-label="Links do rodape">
+          {footerGroups.map((group) => (
+            <details className="footer-mobile-group" key={group.title}>
+              <summary className="footer-mobile-group__summary">
+                <span>{group.title}</span>
+                <span className="footer-mobile-group__icon" aria-hidden="true">
+                  ˅
+                </span>
+              </summary>
+
+              <ul className="footer-mobile-group__links">
+                {group.links.map((link) => (
+                  <li key={link}>
+                    <a href="/">{link}</a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </div>
+
         <div className="footer-grid">
           {footerGroups.map((group) => (
             <section className="footer-column" key={group.title}>

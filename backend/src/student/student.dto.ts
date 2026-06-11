@@ -1,6 +1,6 @@
-import { IsDate, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateStudentEnrollmentDTO {
   @ApiProperty({
@@ -58,7 +58,8 @@ export class CreateStudentDTO {
 
   @ApiProperty({
     example: '2024',
-    description: 'Ano previsto ou real de conclusao do ensino medio/graduacao anterior',
+    description:
+      'Ano previsto ou real de conclusao do ensino medio/graduacao anterior',
   })
   @IsString()
   @IsNotEmpty()
@@ -72,13 +73,13 @@ export class CreateStudentDTO {
   @IsNotEmpty()
   courseId: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'course-price-18x',
     description: 'Id da opcao de preco/parcela escolhida',
   })
   @IsString()
-  @IsNotEmpty()
-  priceId: string;
+  @IsOptional()
+  priceId?: string;
 }
 export class StudentResponseDTO {
   id: string;

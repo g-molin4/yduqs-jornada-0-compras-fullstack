@@ -14,6 +14,10 @@ type EnrollmentContextValue = {
   closeDetails: () => void
   selectedCourse: CourseOffer | null
   setSelectedCourse: (course: CourseOffer | null) => void
+  selectedPriceId: string | null
+  setSelectedPriceId: (priceId: string | null) => void
+  completedStudentName: string | null
+  setCompletedStudentName: (studentName: string | null) => void
 }
 
 const EnrollmentContext = createContext<EnrollmentContextValue | undefined>(undefined)
@@ -21,6 +25,8 @@ const EnrollmentContext = createContext<EnrollmentContextValue | undefined>(unde
 export function EnrollmentProvider({ children }: PropsWithChildren) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState<CourseOffer | null>(null)
+  const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null)
+  const [completedStudentName, setCompletedStudentName] = useState<string | null>(null)
   const openDetails = useCallback(() => setIsDetailsOpen(true), [])
   const closeDetails = useCallback(() => setIsDetailsOpen(false), [])
 
@@ -31,8 +37,19 @@ export function EnrollmentProvider({ children }: PropsWithChildren) {
       closeDetails,
       selectedCourse,
       setSelectedCourse,
+      selectedPriceId,
+      setSelectedPriceId,
+      completedStudentName,
+      setCompletedStudentName,
     }),
-    [closeDetails, isDetailsOpen, openDetails, selectedCourse],
+    [
+      closeDetails,
+      completedStudentName,
+      isDetailsOpen,
+      openDetails,
+      selectedCourse,
+      selectedPriceId,
+    ],
   )
 
   return <EnrollmentContext.Provider value={value}>{children}</EnrollmentContext.Provider>

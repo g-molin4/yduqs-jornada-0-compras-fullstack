@@ -1,3 +1,4 @@
+import { navigateTo } from '../app/routes'
 import estacioLogo from '../assets/estacio-logo-cropped.png'
 
 type AppHeaderProps = {
@@ -10,9 +11,14 @@ export function AppHeader({ title, subtitle }: AppHeaderProps) {
     <>
       <header className="topbar">
         <div className="container">
-          <div className="brand">
+          <button
+            type="button"
+            className="brand brand-button"
+            onClick={() => navigateTo('/')}
+            aria-label="Ir para a pagina principal"
+          >
             <img className="brand__image" src={estacioLogo} alt="Estacio" />
-          </div>
+          </button>
         </div>
       </header>
 

@@ -1,15 +1,14 @@
 import { Info, Plus, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { navigateTo } from '../app/routes'
 import { Button } from '../components/ui/button'
 import { useEnrollment } from '../contexts/EnrollmentContext'
 
 export function CourseDetailsPage() {
-  const { closeDetails, selectedCourse } = useEnrollment()
+  const { closeDetails, selectedCourse, setSelectedPriceId } = useEnrollment()
   const paymentOptions = selectedCourse?.paymentOptions ?? []
   const hasPaymentOptions = paymentOptions.length > 0
-  const defaultOption = useMemo(() => paymentOptions.at(-1)?.id ?? '', [paymentOptions])
-  const [selectedOptionId, setSelectedOptionId] = useState(defaultOption)
+  const [selectedOptionId, setSelectedOptionId] = useState('')
 
   useEffect(() => {
     if (!selectedCourse) {
@@ -18,8 +17,12 @@ export function CourseDetailsPage() {
   }, [closeDetails, selectedCourse])
 
   useEffect(() => {
-    setSelectedOptionId(defaultOption)
-  }, [defaultOption])
+    setSelectedOptionId('')
+  }, [selectedCourse])
+
+  useEffect(() => {
+    setSelectedPriceId(null)
+  }, [selectedCourse, setSelectedPriceId])
 
   if (!selectedCourse) {
     return null
@@ -106,9 +109,14 @@ export function CourseDetailsPage() {
         </div>
 
         <footer className="details-panel__footer">
+          {hasPaymentOptions && !selectedOptionId ? (
+            <p className="details-panel__hint">Selecione uma parcela para continuar.</p>
+          ) : null}
           <Button
             className="details-panel__button"
+            disabled={hasPaymentOptions && !selectedOptionId}
             onClick={() => {
+              setSelectedPriceId(hasPaymentOptions ? selectedOptionId : null)
               closeDetails()
               navigateTo('/enrollment')
             }}
