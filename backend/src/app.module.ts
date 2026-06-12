@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { PrismaModule } from './infra/prisma/prisma.module';
 import { StudentModule } from './student/student.module';
 import { CourseModule } from './course/course.module';
+import { PinoLoggerService } from './logger/pino-logger.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { CourseModule } from './course/course.module';
     CourseModule,
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [AppService, PinoLoggerService],
 })
 export class AppModule {}

@@ -6,12 +6,24 @@ import {
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './logger/all-exceptions.filter';
+import { appLogger } from './logger/logger';
+import { PinoLoggerService } from './logger/pino-logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({
+      loggerInstance: appLogger,
+    }),
+    {
+      bufferLogs: true,
+    },
   );
+  const logger = app.get(PinoLoggerService);
+
+  app.useLogger(logger);
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   app.enableCors({
     origin: 'http://localhost:5173',
@@ -41,6 +53,11 @@ async function bootstrap() {
   const port = process.env.PORT ?? 3000;
 
   await app.listen(port, '0.0.0.0');
+
+  logger.log('Backend started', {
+    port: Number(port),
+    environment: process.env.NODE_ENV ?? 'development',
+  });
 }
 
 void bootstrap();
